@@ -18,5 +18,22 @@ namespace RecordShopBackend.Repository
                 return albums;
             }
         }
+
+        public (bool,Album?) RetrieveAlbumById(int id)
+        {
+            try
+            {
+                using (_database)
+                {
+                    Album album = _database.Albums.
+                        Where(a => a.Id == id).First();
+                    return (true, album);
+                }
+            }
+            catch
+            {
+                return (false, null);
+            }
+        }
     }
 }

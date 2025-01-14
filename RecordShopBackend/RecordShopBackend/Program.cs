@@ -42,6 +42,13 @@ namespace RecordShopBackend
                 app.UseSwaggerUI();
             }
 
+            // Seeding data
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<RecordShopDbContext>();
+                dbContext.Database.EnsureCreated();
+            }
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
