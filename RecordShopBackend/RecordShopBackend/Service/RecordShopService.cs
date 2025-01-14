@@ -4,8 +4,8 @@ namespace RecordShopBackend.Service
 {
     public class RecordShopService: IRecordShopService
     {
-        private RecordShopRepository _repository;
-        public RecordShopService (RecordShopRepository repository)
+        private IRecordShopRepository _repository;
+        public RecordShopService (IRecordShopRepository repository)
         {
             _repository = repository;
         }
