@@ -7,8 +7,8 @@ namespace RecordShopBackend.Controllers
     [Route("[controller]")]
     public class RecordShopController : ControllerBase
     {
-        private readonly RecordShopService _service;
-        public RecordShopController(RecordShopService service)
+        private readonly IRecordShopService _service;
+        public RecordShopController(IRecordShopService service)
         {
             _service = service;
         }
@@ -17,6 +17,12 @@ namespace RecordShopBackend.Controllers
         public IActionResult Welcome()
         {
             return Ok(_service.ReturnWelcomeMessage());
+        }
+
+        [HttpGet("Albums")]
+        public IActionResult GetAllAlbums()
+        {
+            return Ok(_service.ReturnAllAlbums());
         }
     }
 }

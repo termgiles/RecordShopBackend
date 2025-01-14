@@ -21,8 +21,8 @@ namespace RecordShopBackend
             builder.Services.AddSwaggerGen();
 
             // Add scoped
-            builder.Services.AddScoped<RecordShopRepository>();
-            builder.Services.AddScoped<RecordShopService>();
+            builder.Services.AddScoped<IRecordShopRepository, RecordShopRepository>();
+            builder.Services.AddScoped<IRecordShopService,RecordShopService>();
 
             // Database configuration
             //string connectionString = builder.Configuration.GetConnectionString("InMemoryConnection");
