@@ -1,4 +1,10 @@
 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
+using RecordShopBackend.Database;
+using RecordShopBackend.Repository;
+using RecordShopBackend.Service;
+
 namespace RecordShopBackend
 {
     public class Program
@@ -14,6 +20,19 @@ namespace RecordShopBackend
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Add scoped
+            builder.Services.AddScoped<RecordShopRepository>();
+            builder.Services.AddScoped<RecordShopService>();
+
+            // Database configuration
+            //string connectionString = builder.Configuration.GetConnectionString("InMemoryConnection");
+            //builder.Services.AddDbContext<RecordShopDbContext>(options => options.UseSqlServer(connectionString));
+
+            if (builder.Configuration.GetValue<bool>("UseInMemoryDatabase"))
+            {
+                builder.Services.AddDbContext<RecordShopDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+            }
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -26,7 +45,6 @@ namespace RecordShopBackend
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
