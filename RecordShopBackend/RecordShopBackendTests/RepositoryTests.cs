@@ -32,9 +32,13 @@ namespace RecordShopBackendTests
         [SetUp]
         public void Setup()
         {
-            
+
             using (var context = new RecordShopDbContext(options))
             {
+                //foreach (var album in context.Albums)
+                //{
+                //    context.Albums.Remove(album);
+                //}
                 if (!context.Albums.Any())
                 {
                     context.Albums.AddRange(testAlbums);
@@ -44,7 +48,7 @@ namespace RecordShopBackendTests
 
         }
 
-        [Test]
+        [Test, Order(1)]
         public void RetrieveAllAlbums_ReturnsFullAlbumList()
         {
 
@@ -54,7 +58,7 @@ namespace RecordShopBackendTests
                 RecordShopRepository _mockRepository = new RecordShopRepository(context);
                 var output = _mockRepository.RetrieveAllAlbums();
 
-            //Assert
+                //Assert
                 output.Should().BeEquivalentTo(testAlbums);
             }
         }
@@ -69,7 +73,7 @@ namespace RecordShopBackendTests
                 RecordShopRepository _mockRepository = new RecordShopRepository(context);
                 var output = _mockRepository.RetrieveAlbumById(1);
 
-            //Assert
+                //Assert
                 output.Found.Should().BeTrue();
                 output.ReturnedObject.Should().BeEquivalentTo(testAlbums[0]);
             }
@@ -89,6 +93,45 @@ namespace RecordShopBackendTests
                 output.ReturnedObject.Should().BeNull();
             }
         }
-    }
 
+        [Test]
+        public void PutAlbumById_ReturnsModifiedAlbumAndTrue()
+        {
+            // Arrange
+            AlbumModification ammendments = new AlbumModification { Genre = "Art", Released = 2025 };
+            string expected = "Art";
+
+            //Act
+            using (var context = new RecordShopDbContext(options))
+            {
+                RecordShopRepository _mockRepository = new RecordShopRepository(context);
+                var output = _mockRepository.UpdateAlbumById(2, ammendments);
+
+            //Assert
+                output.Found.Should().BeTrue();
+                output.ReturnedObject.Genre.Should().Be(expected);
+            }
+
+        }
+
+        [Test]
+        public void PutAlbumById_ReturnsFalseIfNoAlbum()
+        {
+            // Arrange
+            AlbumModification ammendments = new AlbumModification { Artist = "Madamme Gaga" };
+
+            //Act
+            using (var context = new RecordShopDbContext(options))
+            {
+                RecordShopRepository _mockRepository = new RecordShopRepository(context);
+                var output = _mockRepository.UpdateAlbumById(70, ammendments);
+
+            //Assert
+                output.Found.Should().BeFalse();
+                output.ReturnedObject.Should().BeNull();
+            }
+
+        }
+
+    }
 }

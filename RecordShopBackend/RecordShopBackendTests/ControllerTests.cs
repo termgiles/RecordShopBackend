@@ -112,5 +112,37 @@ namespace RecordShopBackendTests
             result.Should().BeOfType<NotFoundResult>()
                 .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound);;
         }
+        [Test]
+        public void PutAlbumById_QueriesServiceLayerOnce()
+        {
+            // Arrange
+            var expected = new AlbumReturn { Found = true, ReturnedObject = testAlbums[0] };
+            AlbumModification mod = new AlbumModification();
+            _mockService.Setup(r => r.AmmendAlbumById(1, mod)).Returns(expected);
+
+            // Act
+            var result = _controller.PutAlbumById(1, mod);
+
+            // Assert
+            _mockService.Verify(r => r.AmmendAlbumById(1, mod), Times.Once());
+
+        }
+
+        [Test]
+        public void PutAlbumById_Returns404IfNoAlbum()
+        {
+            // Arrange
+            var expected = new AlbumReturn { Found = false, ReturnedObject = null };
+            AlbumModification mod = new AlbumModification();
+            _mockService.Setup(r => r.AmmendAlbumById(70, mod)).Returns(expected);
+
+
+            // Act
+            var result = _controller.PutAlbumById(70, mod);
+
+            // Assert
+            result.Should().BeOfType<NotFoundResult>()
+                .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound); ;
+        }
     }
 }

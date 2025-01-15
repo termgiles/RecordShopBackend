@@ -66,5 +66,20 @@ namespace RecordShopBackendTests
             output.Should().BeEquivalentTo(expected);
             _mockRepository.Verify(r => r.RetrieveAlbumById(1), Times.Once);
         }
+
+        [Test]
+        public void AmmendAlbumById_CallsRepositoryOnce()
+        {
+            // Arrange
+            var expected = new AlbumReturn { Found = true, ReturnedObject = testAlbums[0] };
+            AlbumModification mod = new AlbumModification();
+            _mockRepository.Setup(r => r.UpdateAlbumById(1, mod)).Returns(expected);
+
+            //Act
+            var output = _service.AmmendAlbumById(1, mod);
+
+            //Assert
+            _mockRepository.Verify(r => r.UpdateAlbumById(1, mod), Times.Once);
+        }
     }
 }
