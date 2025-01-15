@@ -142,7 +142,49 @@ namespace RecordShopBackendTests
 
             // Assert
             result.Should().BeOfType<NotFoundResult>()
-                .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound); ;
+                .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        }
+        [Test]
+        public void DeleteAlbumById_QueriesServiceLayerOnce()
+        {
+            // Arrange
+            var expected = true;
+            _mockService.Setup(r => r.RemoveAlbumById(1)).Returns(expected);
+
+            // Act
+            var result = _controller.DeleteAlbumById(1);
+
+            //Assert
+            _mockService.Verify(r => r.RemoveAlbumById(1), Times.Once());
+
+        }
+        [Test]
+        public void DeleteAlbumById_Returns204IfFoundIsTrue()
+        {
+            // Arrange
+            var expected = true;
+            _mockService.Setup(r => r.RemoveAlbumById(1)).Returns(expected);
+
+            // Act
+            var result = _controller.DeleteAlbumById(1);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>()
+               .Which.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
+        }
+        [Test]
+        public void DeleteAlbumById_Returns404IfFoundIsFalse()
+        {
+            // Arrange
+            var expected = false;
+            _mockService.Setup(r => r.RemoveAlbumById(70)).Returns(expected);
+
+            // Act
+            var result = _controller.DeleteAlbumById(70);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>()
+               .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
     }
 }

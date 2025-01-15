@@ -63,7 +63,7 @@ namespace RecordShopBackendTests
             }
         }
 
-        [Test]
+        [Test, Order(2)]
         public void RetrieveAlbumById_ReturnsTrueWithCorrectAlbum()
         {
 
@@ -129,6 +129,38 @@ namespace RecordShopBackendTests
             //Assert
                 output.Found.Should().BeFalse();
                 output.ReturnedObject.Should().BeNull();
+            }
+
+        }
+
+        [Test]
+        public void DeleteAlbumById_ReturnsTrueIfAlbumExists()
+        {
+    
+            //Act
+            using (var context = new RecordShopDbContext(options))
+            {
+                RecordShopRepository _mockRepository = new RecordShopRepository(context);
+                bool output = _mockRepository.DeleteAlbumById(1);
+
+            //Assert
+                output.Should().BeTrue();
+                _mockRepository.RetrieveAlbumById(1).Found.Should().BeFalse();
+            }
+
+        }
+        [Test]
+        public void DeleteAlbumById_ReturnsFalseIfNoAlbum()
+        {
+
+            //Act
+            using (var context = new RecordShopDbContext(options))
+            {
+                RecordShopRepository _mockRepository = new RecordShopRepository(context);
+                bool output = _mockRepository.DeleteAlbumById(70);
+
+            //Assert
+                output.Should().BeFalse();
             }
 
         }

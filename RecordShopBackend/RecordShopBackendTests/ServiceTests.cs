@@ -81,5 +81,18 @@ namespace RecordShopBackendTests
             //Assert
             _mockRepository.Verify(r => r.UpdateAlbumById(1, mod), Times.Once);
         }
+        [Test]
+        public void RemoveAlbumById_CallsRepositoryOnce()
+        {
+            // Arrange
+            var expected = true;
+            _mockRepository.Setup(r => r.DeleteAlbumById(1)).Returns(expected);
+
+            //Act
+            var output = _service.RemoveAlbumById(1);
+
+            //Assert
+            _mockRepository.Verify(r => r.DeleteAlbumById(1), Times.Once);
+        }
     }
 }
