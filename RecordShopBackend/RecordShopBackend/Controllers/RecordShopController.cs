@@ -26,9 +26,14 @@ namespace RecordShopBackend.Controllers
         }
 
         [HttpGet("Album/{id}")]
-        public IActionResult GetAlbymById(int id)
+        public IActionResult GetAlbumById(int id)
         {
-            return Ok(new Album());
+            AlbumReturn result = _service.ReturnAlbumById(id);
+            if (result.Found)
+            {
+                return Ok(result.ReturnedObject);
+            }
+            return NotFound();
         }
     }
 }
