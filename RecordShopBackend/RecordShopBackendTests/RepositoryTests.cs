@@ -165,5 +165,41 @@ namespace RecordShopBackendTests
 
         }
 
+        [Test]
+        public void CreateAlbum_ReturnsTrueIfAlreadyExists()
+        {
+
+            // Arrange
+            Album duplicateAlbum = new Album { Id = 1, Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Name = "La renommee", Released = 2008 };
+
+            //Act
+            using (var context = new RecordShopDbContext(options))
+            {
+                RecordShopRepository _mockRepository = new RecordShopRepository(context);
+                var output = _mockRepository.CreateAlbum(duplicateAlbum);
+
+                //Assert
+                output.Found.Should().BeTrue();
+            }
+
+        }
+
+        [Test]
+        public void CreateAlbum_returnsFalseIfNoAlbum()
+        {
+            // Arrange
+            Album originalWork = new Album { Id = 3, Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Name = "nouveau album", Released = 2025 };
+
+            //Act
+            using (var context = new RecordShopDbContext(options))
+            {
+                RecordShopRepository _mockRepository = new RecordShopRepository(context);
+                var output = _mockRepository.CreateAlbum(originalWork);
+
+                //Assert
+                output.Found.Should().BeFalse();
+                output.ReturnedObject.Should().BeEquivalentTo(originalWork);
+            }
+        }
     }
 }

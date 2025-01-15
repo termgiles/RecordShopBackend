@@ -90,9 +90,36 @@ namespace RecordShopBackendTests
 
             //Act
             var output = _service.RemoveAlbumById(1);
-
+         
             //Assert
             _mockRepository.Verify(r => r.DeleteAlbumById(1), Times.Once);
         }
+        [Test]
+        public void AddAlbum_RejectsAlbumWithNoName()
+        {
+            // Arrange
+            var originalWork = new Album { Id = 4, Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008 };
+
+            // Act
+            var result = _service.AddAlbum(originalWork);
+
+            // Assert
+            (result.ReturnedObject == null).Should().BeTrue();
+        }
+
+        [Test]
+        public void AddAlbum_TriesToAssignUnassignedIdAndCallsRepository()
+        {
+            // Arrange
+            var originalWork = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            _mockRepository.Setup(a => a.CreateAlbum(originalWork));
+
+            // Act
+            var result = _service.AddAlbum(originalWork);
+
+            // Assert
+            _mockRepository.Verify(a => a.CreateAlbum(originalWork), Times.Once);
+        }
+
     }
 }

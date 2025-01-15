@@ -5,6 +5,7 @@ using RecordShopBackend.Service;
 using RecordShopBackend.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace RecordShopBackendTests
 {
@@ -185,6 +186,41 @@ namespace RecordShopBackendTests
             //Assert
             result.Should().BeOfType<NotFoundResult>()
                .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public void PostAlbum_FalseNotNull_Returns201()
+        {
+            // Arrange
+            var originalWork = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            AlbumReturn returned = new AlbumReturn { Found = false, ReturnedObject = originalWork };
+            _mockService.Setup(p => p.AddAlbum(originalWork)).Returns(returned);
+
+            // Act
+            var result = _controller.PostAlbum(originalWork);
+
+            //
+            result.Should().BeOfType<CreatedResult>();
+          
+
+        }
+
+        [Test]
+        public void PostAlbum_TrueNotNull_Returns400()
+        {
+            // Arrange
+            var originalWork = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            AlbumReturn returned = new AlbumReturn { Found = true, ReturnedObject = originalWork };
+            _mockService.Setup(p => p.AddAlbum(originalWork)).Returns(returned);
+
+            // Act
+            var result = _controller.PostAlbum(originalWork);
+
+            //
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+
+
         }
     }
 }
