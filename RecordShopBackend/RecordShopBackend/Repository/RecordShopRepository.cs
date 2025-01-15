@@ -19,7 +19,7 @@ namespace RecordShopBackend.Repository
             }
         }
 
-        public (bool,Album?) RetrieveAlbumById(int id)
+        public AlbumReturn RetrieveAlbumById(int id)
         {
             try
             {
@@ -27,12 +27,12 @@ namespace RecordShopBackend.Repository
                 {
                     Album album = _database.Albums.
                         Where(a => a.Id == id).First();
-                    return (true, album);
+                    return new AlbumReturn { Found = true, ReturnedObject = album };
                 }
             }
             catch
             {
-                return (false, null);
+                return new AlbumReturn { Found = false, ReturnedObject = null };
             }
         }
     }
