@@ -26,13 +26,14 @@ namespace RecordShopBackend
             builder.Services.AddScoped<IRecordShopRepository, RecordShopRepository>();
             builder.Services.AddScoped<IRecordShopService,RecordShopService>();
 
-            // Database configuration
-            //string connectionString = builder.Configuration.GetConnectionString("InMemoryConnection");
-            //builder.Services.AddDbContext<RecordShopDbContext>(options => options.UseSqlServer(connectionString));
-
             if (builder.Configuration.GetValue<bool>("UseInMemoryDatabase"))
             {
                 builder.Services.AddDbContext<RecordShopDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+            }
+            else if (!builder.Configuration.GetValue<bool>("UseInMemoryDatabase"))
+            {
+                string connectionString = builder.Configuration.GetConnectionString("SQLEXPRESS");
+                builder.Services.AddDbContext<RecordShopDbContext>(options => options.UseSqlServer(connectionString));
             }
 
             //HealthChecks
