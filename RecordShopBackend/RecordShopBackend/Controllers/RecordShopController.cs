@@ -58,5 +58,24 @@ namespace RecordShopBackend.Controllers
             return NotFound();
         }
 
+        [HttpPost("Album")]
+        public IActionResult PostAlbum(Album album)
+        {
+            AlbumReturn result = _service.AddAlbum(album);
+            if(result.Found && result.ReturnedObject != null)
+            {
+                return BadRequest($"album with Id {result.ReturnedObject.Id} already exists");
+            }
+            else if(!result.Found && result.ReturnedObject.Name != "")
+            {
+                return Created();
+            }
+            else
+            {
+                return BadRequest("Album not created, please try again");
+            }
+
+        }
+
     }
 }

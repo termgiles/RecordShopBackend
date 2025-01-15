@@ -30,10 +30,34 @@ namespace RecordShopBackend.Service
             return _repository.DeleteAlbumById(id);
         }
 
+        public AlbumReturn AddAlbum(Album album)
+        {
+            if (album.Id == 0)
+            {
+                album.Id = new Random().Next(100000000, 1000000000);
+            }
+            if (AlbumValid(album))
+            {
+                return _repository.CreateAlbum(album);
+            }
+            return new AlbumReturn { Found = true };
+        }
         public string ReturnWelcomeMessage()
         {
             return "Welcome to the Record Shop Database";
         }
 
+        public static bool AlbumValid(Album album)
+        {
+            if (album.Id == 0) return false;
+            if (album.Artist == null || album.Artist == "") return false;
+            if (album.Genre == null || album.Genre == "") return false;
+            if (album.Name == null || album.Name == "") return false;
+            if (album.Artist == null || album.Artist == "") return false;
+            if (album.Information == null || album.Information == "") return false;
+            if (album.Released == null || album.Released > (int)DateTime.UtcNow.Year) return false;
+
+            return true;
+        }
     }
 }

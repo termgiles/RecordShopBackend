@@ -95,5 +95,27 @@ namespace RecordShopBackend.Repository
                 }
             }
         }
+
+        public AlbumReturn CreateAlbum(Album album)
+        {
+                using (_database)
+                {
+                try
+                {
+                    if (_database.Albums.Any(a => a.Id == album.Id))
+                    {
+                        return new AlbumReturn { Found = true, ReturnedObject = album };
+                    }
+                    _database.Albums.Add(album);
+                    _database.SaveChanges();
+                    AlbumReturn newAlbum = new AlbumReturn { Found = false, ReturnedObject = album };
+                    return newAlbum;
+                }
+                catch
+                {
+                    return new AlbumReturn { Found = false, ReturnedObject = null };
+                }
+                }
+        }
     }
 }

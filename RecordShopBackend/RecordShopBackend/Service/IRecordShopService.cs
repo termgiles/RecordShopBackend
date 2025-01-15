@@ -6,6 +6,7 @@
         public AlbumReturn ReturnAlbumById(int id);
         public AlbumReturn AmmendAlbumById(int id, AlbumModification ammendments);
         public bool RemoveAlbumById(int id);
+        public AlbumReturn AddAlbum(Album album);
         public string ReturnWelcomeMessage();
 
     }

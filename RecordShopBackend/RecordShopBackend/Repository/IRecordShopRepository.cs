@@ -7,5 +7,6 @@ namespace RecordShopBackend.Repository
         public AlbumReturn RetrieveAlbumById(int id);
         public AlbumReturn UpdateAlbumById(int id, AlbumModification ammendments);
         public bool DeleteAlbumById(int id);
+        public AlbumReturn CreateAlbum(Album album);
     }
 }
