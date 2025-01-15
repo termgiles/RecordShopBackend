@@ -35,5 +35,16 @@ namespace RecordShopBackend.Controllers
             }
             return NotFound();
         }
+
+        [HttpPut("Album/{id}")]
+        public IActionResult PutAlbumById(int id, AlbumModification ammendments)
+        {
+            AlbumReturn result = _service.AmmendAlbumById(id, ammendments);
+            if (result.Found)
+            {
+                return Ok(result.ReturnedObject);
+            }
+            return NotFound();
+        }
     }
 }

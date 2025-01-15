@@ -20,9 +20,15 @@ namespace RecordShopBackend.Service
             return _repository.RetrieveAlbumById(id);
         }
 
+        public AlbumReturn AmmendAlbumById(int id, AlbumModification ammendments)
+        {
+            return _repository.UpdateAlbumById(id,ammendments);
+        }
+
         public string ReturnWelcomeMessage()
         {
             return "Welcome to the Record Shop Database";
         }
+
     }
 }

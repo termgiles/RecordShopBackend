@@ -4,6 +4,7 @@
     {
         public List<Album> ReturnAllAlbums();
         public AlbumReturn ReturnAlbumById(int id);
+        public AlbumReturn AmmendAlbumById(int id, AlbumModification ammendments);
         public string ReturnWelcomeMessage();
 
     }
