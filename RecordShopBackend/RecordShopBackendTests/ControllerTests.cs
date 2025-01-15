@@ -113,6 +113,7 @@ namespace RecordShopBackendTests
             result.Should().BeOfType<NotFoundResult>()
                 .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound);;
         }
+
         [Test]
         public void PutAlbumById_QueriesServiceLayerOnce()
         {
@@ -145,6 +146,7 @@ namespace RecordShopBackendTests
             result.Should().BeOfType<NotFoundResult>()
                 .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
+
         [Test]
         public void DeleteAlbumById_QueriesServiceLayerOnce()
         {
@@ -159,6 +161,7 @@ namespace RecordShopBackendTests
             _mockService.Verify(r => r.RemoveAlbumById(1), Times.Once());
 
         }
+
         [Test]
         public void DeleteAlbumById_Returns204IfFoundIsTrue()
         {
@@ -173,6 +176,7 @@ namespace RecordShopBackendTests
             result.Should().BeOfType<NoContentResult>()
                .Which.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
         }
+
         [Test]
         public void DeleteAlbumById_Returns404IfFoundIsFalse()
         {
@@ -220,6 +224,40 @@ namespace RecordShopBackendTests
             result.Should().BeOfType<BadRequestObjectResult>()
                 .Which.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
 
+
+        }
+
+        [Test]
+        public void PostAlbum_TrueAndNull_Returns400()
+        {
+            // Arrange
+            var originalWork = new Album { Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            AlbumReturn returned = new AlbumReturn { Found = true, ReturnedObject = null };
+            _mockService.Setup(p => p.AddAlbum(originalWork)).Returns(returned);
+
+            // Act
+            var result = _controller.PostAlbum(originalWork);
+
+            //
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+
+
+        }
+
+        [Test]
+        public void PostAlbum_QueriesServiceLayerOnce()
+        {
+            // Arrange
+            var originalWork = new Album { Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            AlbumReturn returned = new AlbumReturn { Found = true, ReturnedObject = null };
+            _mockService.Setup(p => p.AddAlbum(originalWork)).Returns(returned);
+
+            // Act
+            var result = _controller.PostAlbum(originalWork);
+
+            //Assert
+            _mockService.Verify(r => r.AddAlbum(originalWork), Times.Once());
 
         }
     }

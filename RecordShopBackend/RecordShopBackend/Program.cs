@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RecordShopBackend.Controllers;
 using RecordShopBackend.Database;
 using RecordShopBackend.Repository;
 using RecordShopBackend.Service;
@@ -33,6 +35,13 @@ namespace RecordShopBackend
                 builder.Services.AddDbContext<RecordShopDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
             }
 
+            //HealthChecks
+            builder.Services.AddHealthChecks()
+                .AddCheck<RecordShopHealthCheck>("GetAllAlbums responds check",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: new[] { "" }
+                );
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -53,7 +62,10 @@ namespace RecordShopBackend
 
             app.UseAuthorization();
 
+            app.UseHealthChecks("/health");
+
             app.MapControllers();
+           
 
             app.Run();
         }
