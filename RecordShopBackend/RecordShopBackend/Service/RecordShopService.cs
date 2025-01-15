@@ -25,6 +25,11 @@ namespace RecordShopBackend.Service
             return _repository.UpdateAlbumById(id,ammendments);
         }
 
+        public bool RemoveAlbumById(int id)
+        {
+            return _repository.DeleteAlbumById(id);
+        }
+
         public string ReturnWelcomeMessage()
         {
             return "Welcome to the Record Shop Database";

@@ -46,5 +46,17 @@ namespace RecordShopBackend.Controllers
             }
             return NotFound();
         }
+
+        [HttpDelete("Album/{id}")]
+        public IActionResult DeleteAlbumById(int id)
+        {
+            bool found = _service.RemoveAlbumById(id);
+            if (found)
+            {
+                return NoContent();
+            }
+            return NotFound();
+        }
+
     }
 }

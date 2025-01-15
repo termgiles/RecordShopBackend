@@ -69,5 +69,31 @@ namespace RecordShopBackend.Repository
                 }
             }
         }
+
+        public bool DeleteAlbumById(int id)
+        {
+            using (_database)
+            {
+                try
+                {
+                    if (_database.Albums.Any(a => a.Id == id))
+                    {
+                        Album albumToDelete = _database.Albums.First(a => a.Id == id);
+                        _database.Albums.Remove(albumToDelete);
+                        _database.SaveChanges();
+
+                        return true;
+                    }
+                    else
+                    {
+                        throw new Exception("album not found");
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
     }
 }
