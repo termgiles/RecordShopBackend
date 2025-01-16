@@ -201,5 +201,14 @@ namespace RecordShopBackendTests
                 output.ReturnedObject.Should().BeEquivalentTo(originalWork);
             }
         }
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            using (var context = new RecordShopDbContext(options))
+            {
+                context.Database.EnsureDeleted();
+                context.Dispose();
+            }
+        }
     }
 }
