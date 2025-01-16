@@ -42,6 +42,13 @@ namespace RecordShopBackend.Service
             }
             return new AlbumReturn { Found = true };
         }
+
+        public List<Album> ParseQuery(string? name, string? artist, int? released, string? genre, string? information)
+        {
+            AlbumModification query = new AlbumModification { Artist = artist, Genre = genre, Information = information, Name = name, Released = released };
+
+            return _repository.RetrieveAlbumQuery(query);
+        }
         public string ReturnWelcomeMessage()
         {
             return "Welcome to the Record Shop Database";
@@ -59,5 +66,7 @@ namespace RecordShopBackend.Service
 
             return true;
         }
+
+        
     }
 }

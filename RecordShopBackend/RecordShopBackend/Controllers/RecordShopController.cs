@@ -66,7 +66,7 @@ namespace RecordShopBackend.Controllers
             {
                 return BadRequest($"album with Id {result.ReturnedObject.Id} already exists");
             }
-            else if(!result.Found && result.ReturnedObject.Name != "")
+            else if(!result.Found && result.ReturnedObject.Name != null)
             {
                 return Created();
             }
@@ -75,6 +75,21 @@ namespace RecordShopBackend.Controllers
                 return BadRequest("Album not created, please try again");
             }
 
+        }
+
+        [HttpGet("Albums/Query")]
+        public IActionResult QueryAlbums(string? name, string? artist, int? released, string? genre, string? information)
+        {
+            try
+            {
+                List<Album> result = _service.ParseQuery(name, artist, released, genre, information);
+                if (result.Count > 0) return Ok(result);
+                return NotFound("No albums matching the query were found.");
+            }
+            catch
+            {
+                return BadRequest("Invalid query paramerters.");
+            }
         }
 
     }

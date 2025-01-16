@@ -1,5 +1,7 @@
-﻿using RecordShopBackend;
+﻿using Microsoft.EntityFrameworkCore;
+using RecordShopBackend;
 using RecordShopBackend.Database;
+using System.Linq.Expressions;
 
 namespace RecordShopBackend.Repository
 {
@@ -33,6 +35,39 @@ namespace RecordShopBackend.Repository
             catch
             {
                 return new AlbumReturn { Found = false, ReturnedObject = null };
+            }
+        }
+
+        public List<Album> RetrieveAlbumQuery(AlbumModification query)
+        {
+            try
+            {
+                using (_database)
+                {
+                    var releasedQuery = query.Released == null || query.Released == 0 ?
+                        _database.Albums : _database.Albums.Where(a => a.Released == query.Released);
+                    var nameQuery = query.Name == null ?
+                        releasedQuery : releasedQuery.Where(a => a.Name == query.Name);
+                    var artistQuery = query.Artist == null ?
+                       nameQuery : nameQuery.Where(a => a.Artist == query.Artist);
+                    var genreQuery = query.Genre == null ?
+                        artistQuery : artistQuery.Where(a => a.Genre == query.Genre);
+                    var informationQuery = query.Information == null ?
+                        genreQuery : genreQuery.Where(a => a.Information == query.Information);
+
+                    if(informationQuery.ToList<Album>().Count > 0)
+                    {
+                        return informationQuery.ToList<Album>();
+                    }
+                    else
+                    {
+                        throw new Exception("no albums match query");
+                    }
+                }
+            }
+            catch
+            {
+                return new List<Album>();
             }
         }
 
@@ -100,20 +135,27 @@ namespace RecordShopBackend.Repository
         {
                 using (_database)
                 {
+                _database.Database.OpenConnection();
                 try
                 {
+                    _database.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Albums ON");
                     if (_database.Albums.Any(a => a.Id == album.Id))
                     {
                         return new AlbumReturn { Found = true, ReturnedObject = album };
                     }
                     _database.Albums.Add(album);
                     _database.SaveChanges();
+                    _database.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Albums OFF");
                     AlbumReturn newAlbum = new AlbumReturn { Found = false, ReturnedObject = album };
                     return newAlbum;
                 }
                 catch
                 {
                     return new AlbumReturn { Found = false, ReturnedObject = null };
+                }
+                finally
+                {
+                    _database.Database.CloseConnection();
                 }
                 }
         }
