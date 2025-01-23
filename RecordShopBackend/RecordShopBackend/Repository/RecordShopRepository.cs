@@ -133,19 +133,16 @@ namespace RecordShopBackend.Repository
 
         public AlbumReturn CreateAlbum(Album album)
         {
-                using (_database)
-                {
-                _database.Database.OpenConnection();
+            using (_database)
+            {
                 try
                 {
-                    _database.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Albums ON");
                     if (_database.Albums.Any(a => a.Id == album.Id))
                     {
                         return new AlbumReturn { Found = true, ReturnedObject = album };
                     }
                     _database.Albums.Add(album);
                     _database.SaveChanges();
-                    _database.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Albums OFF");
                     AlbumReturn newAlbum = new AlbumReturn { Found = false, ReturnedObject = album };
                     return newAlbum;
                 }
@@ -153,11 +150,7 @@ namespace RecordShopBackend.Repository
                 {
                     return new AlbumReturn { Found = false, ReturnedObject = null };
                 }
-                finally
-                {
-                    _database.Database.CloseConnection();
-                }
-                }
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PatternContexts;
 using RecordShopBackend.Service;
 
 namespace RecordShopBackend.Controllers
@@ -59,16 +60,17 @@ namespace RecordShopBackend.Controllers
         }
 
         [HttpPost("Album")]
-        public IActionResult PostAlbum(Album album)
+        public IActionResult PostAlbum(AlbumModification albumData)
         {
-            AlbumReturn result = _service.AddAlbum(album);
+            AlbumReturn result = _service.AddAlbum(albumData);
             if(result.Found && result.ReturnedObject != null)
             {
                 return BadRequest($"album with Id {result.ReturnedObject.Id} already exists");
             }
             else if(!result.Found && result.ReturnedObject.Name != null)
             {
-                return Created();
+                string location = "album/"+ result.ReturnedObject.Id.ToString();
+                return Created(location, result.ReturnedObject);
             }
             else
             {

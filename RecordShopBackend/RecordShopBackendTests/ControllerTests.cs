@@ -43,7 +43,7 @@ namespace RecordShopBackendTests
         }
 
         [Test]
-        public void GetAllAlbums_QueriesServiceLAyer_Once()
+        public void GetAllAlbums_QueriesServiceLayer_Once()
         {
             // Act
             _controller.GetAllAlbums();
@@ -196,8 +196,9 @@ namespace RecordShopBackendTests
         public void PostAlbum_FalseNotNull_Returns201()
         {
             // Arrange
-            var originalWork = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
-            AlbumReturn returned = new AlbumReturn { Found = false, ReturnedObject = originalWork };
+            var originalWork = new AlbumModification { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            var originalWorkAlbum = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            AlbumReturn returned = new AlbumReturn { Found = false, ReturnedObject = originalWorkAlbum };
             _mockService.Setup(p => p.AddAlbum(originalWork)).Returns(returned);
 
             // Act
@@ -213,8 +214,9 @@ namespace RecordShopBackendTests
         public void PostAlbum_TrueNotNull_Returns400()
         {
             // Arrange
-            var originalWork = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
-            AlbumReturn returned = new AlbumReturn { Found = true, ReturnedObject = originalWork };
+            var originalWork = new AlbumModification { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            var originalWorkAlbum = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            AlbumReturn returned = new AlbumReturn { Found = true, ReturnedObject = originalWorkAlbum };
             _mockService.Setup(p => p.AddAlbum(originalWork)).Returns(returned);
 
             // Act
@@ -231,7 +233,8 @@ namespace RecordShopBackendTests
         public void PostAlbum_TrueAndNull_Returns400()
         {
             // Arrange
-            var originalWork = new Album { Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            var originalWork = new AlbumModification { Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            var originalWorkAlbum = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
             AlbumReturn returned = new AlbumReturn { Found = true, ReturnedObject = null };
             _mockService.Setup(p => p.AddAlbum(originalWork)).Returns(returned);
 
@@ -249,7 +252,8 @@ namespace RecordShopBackendTests
         public void PostAlbum_QueriesServiceLayerOnce()
         {
             // Arrange
-            var originalWork = new Album { Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            var originalWork = new AlbumModification { Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
+            var originalWorkAlbum = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
             AlbumReturn returned = new AlbumReturn { Found = true, ReturnedObject = null };
             _mockService.Setup(p => p.AddAlbum(originalWork)).Returns(returned);
 

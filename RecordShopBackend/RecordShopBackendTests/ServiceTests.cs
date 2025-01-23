@@ -22,7 +22,7 @@ namespace RecordShopBackendTests
             _mockRepository = new Mock<IRecordShopRepository>();
             _service = new RecordShopService(_mockRepository.Object);
         }
-
+        #region WelcomeMessage
         [Test]
         public void ReturnWelcomeMessage_ReturnsCorrectString()
         {
@@ -36,7 +36,9 @@ namespace RecordShopBackendTests
 
             output.Should().Be(expected);
         }
+        #endregion
 
+        #region ReturnAll
         [Test]
         public void ReturnAllAlbums_ReturnsAlbumListWithOneCall()
         {
@@ -51,7 +53,9 @@ namespace RecordShopBackendTests
             output.Should().BeEquivalentTo(expected);
             _mockRepository.Verify(r => r.RetrieveAllAlbums(), Times.Once);
         }
+        #endregion
 
+        #region ReturnAlbumById
         [Test]
         public void ReturnAlbumById_ReturnsAlbumReturnWithOneCall()
         {
@@ -66,7 +70,9 @@ namespace RecordShopBackendTests
             output.Should().BeEquivalentTo(expected);
             _mockRepository.Verify(r => r.RetrieveAlbumById(1), Times.Once);
         }
+        #endregion
 
+        #region AmmendAlbumById
         [Test]
         public void AmmendAlbumById_CallsRepositoryOnce()
         {
@@ -81,6 +87,9 @@ namespace RecordShopBackendTests
             //Assert
             _mockRepository.Verify(r => r.UpdateAlbumById(1, mod), Times.Once);
         }
+        #endregion
+
+        #region RemoveAlbumById
         [Test]
         public void RemoveAlbumById_CallsRepositoryOnce()
         {
@@ -94,11 +103,14 @@ namespace RecordShopBackendTests
             //Assert
             _mockRepository.Verify(r => r.DeleteAlbumById(1), Times.Once);
         }
+        #endregion
+
+        #region Add+ValidateAlbum
         [Test]
         public void AddAlbum_RejectsAlbumWithNoName()
         {
             // Arrange
-            var originalWork = new Album { Id = 4, Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008 };
+            var originalWork = new AlbumModification { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008 };
 
             // Act
             var result = _service.AddAlbum(originalWork);
@@ -107,19 +119,12 @@ namespace RecordShopBackendTests
             (result.ReturnedObject == null).Should().BeTrue();
         }
 
-        [Test]
-        public void AddAlbum_TriesToAssignUnassignedIdAndCallsRepository()
-        {
-            // Arrange
-            var originalWork = new Album { Artist = "Lady Gaga", Genre = "La Pop", Information = "un album de la chanteuse Lady Gaga", Released = 2008, Name = "nouveau album" };
-            _mockRepository.Setup(a => a.CreateAlbum(originalWork));
+        #endregion
 
-            // Act
-            var result = _service.AddAlbum(originalWork);
 
-            // Assert
-            _mockRepository.Verify(a => a.CreateAlbum(originalWork), Times.Once);
-        }
+        //Album valid tests
+
+
 
     }
 }

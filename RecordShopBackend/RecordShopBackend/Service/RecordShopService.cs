@@ -30,12 +30,18 @@ namespace RecordShopBackend.Service
             return _repository.DeleteAlbumById(id);
         }
 
-        public AlbumReturn AddAlbum(Album album)
+        public AlbumReturn AddAlbum(AlbumModification albumData)
         {
-            if (album.Id == 0)
-            {
-                album.Id = new Random().Next(100000000, 1000000000);
-            }
+            //if (album.Id == 0)
+            //{
+            //    album.Id = new Random().Next(100000000, 1000000000);
+            //}
+            Album album = new Album() { Name = albumData.Name,
+                Artist = albumData.Artist,
+                Released = (int)albumData.Released,
+                Genre = albumData.Genre,
+                Information = albumData.Information };
+
             if (AlbumValid(album))
             {
                 return _repository.CreateAlbum(album);

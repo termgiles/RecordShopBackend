@@ -6,7 +6,7 @@
         public AlbumReturn ReturnAlbumById(int id);
         public AlbumReturn AmmendAlbumById(int id, AlbumModification ammendments);
         public bool RemoveAlbumById(int id);
-        public AlbumReturn AddAlbum(Album album);
+        public AlbumReturn AddAlbum(AlbumModification albumData);
         public string ReturnWelcomeMessage();
         public List<Album> ParseQuery(string? name, string? artist, int? released, string? genre, string? information);
 
