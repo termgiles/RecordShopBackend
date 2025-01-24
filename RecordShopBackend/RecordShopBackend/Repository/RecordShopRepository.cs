@@ -80,8 +80,6 @@ namespace RecordShopBackend.Repository
                     if(_database.Albums.Any(a => a.Id == id))
                     {
                         Album albumToPut = _database.Albums.First(a => a.Id == id);
-                        _database.Albums.Remove(albumToPut);
-                        _database.SaveChanges();
 
                         if (ammendments.Name != null) albumToPut.Name = ammendments.Name;
                         if (ammendments.Artist != null) albumToPut.Artist = ammendments.Artist;
@@ -89,7 +87,6 @@ namespace RecordShopBackend.Repository
                         if (ammendments.Genre != null) albumToPut.Genre = ammendments.Genre;
                         if (ammendments.Information != null) albumToPut.Information = ammendments.Information;
 
-                        _database.Albums.Add(albumToPut);
                         _database.SaveChanges();
                         return new AlbumReturn { Found = true, ReturnedObject = albumToPut };
                     }
