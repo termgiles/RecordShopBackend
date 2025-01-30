@@ -70,7 +70,7 @@ namespace RecordShopBackend.Controllers
             else if(!result.Found && result.ReturnedObject.Name != null)
             {
                 string location = "album/"+ result.ReturnedObject.Id.ToString();
-                return Created(location, result.ReturnedObject);
+                return Ok(result.ReturnedObject);
             }
             else
             {

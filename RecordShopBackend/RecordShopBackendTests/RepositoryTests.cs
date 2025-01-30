@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using RecordShopBackend.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
 
 
 namespace RecordShopBackendTests
@@ -201,6 +202,31 @@ namespace RecordShopBackendTests
                 output.ReturnedObject.Should().BeEquivalentTo(originalWork);
             }
         }
+
+        [Test]
+        public void RetrieveAlbumQuery_ReturnsFullListEmptyQuery()
+        {
+            //Arrange
+            AlbumModification emptyQuery = new AlbumModification();
+            List<Album> output;
+            List<Album> expected;
+            using (var context = new RecordShopDbContext(options))
+            {
+                RecordShopRepository _mocRepository = new RecordShopRepository(context);
+                expected = _mocRepository.RetrieveAllAlbums();
+            }
+
+            //Act
+            using (var context = new RecordShopDbContext(options))
+            {
+                RecordShopRepository _mocRepository = new RecordShopRepository(context);
+                output = _mocRepository.RetrieveAlbumQuery(emptyQuery);
+            }
+
+            //Assert
+            output.Count.Should().Be(expected.Count);
+        }
+
         [OneTimeTearDown]
         public void TearDown()
         {
